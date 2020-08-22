@@ -1,4 +1,4 @@
-+<!Doctype html>
+<!Doctype html>
 <html lang="ko">
 
 <head>
@@ -41,7 +41,54 @@
     <meta name="theme-color" content="#563d7c">
     <!--    #미세먼지 open api-->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript">
 
+    </script>
+    <script>
+        $(document).ready(function () {
+            // index.html 로드가 완료되면 자동으로 showStar() 함수를 호출합니다.
+            bikeList();
+        });
+
+        function bikeList() {
+            // 1. #star_box의 내부 html 태그를 모두 삭제합니다.
+            $('#cards-box').empty()
+
+            // 2. 서버에 1) GET 방식으로, 2) /api/list 라는 주소로 star_list를 요청합니다.
+            $.ajax({
+                type: "GET",
+                url: "/bikes",
+                data: {},
+                success: function (response) {
+                    // 3. 서버가 돌려준 star_list를 star라는 변수에 저장합니다.
+                    let bikes = response['bike_list']
+                    // 4. for 문을 활용하여 star 배열의 요소를 차례대로 조회합니다.
+                    for (let i = 0; i < bikes.length; i++) {
+                        let bike = bikes[i]
+                        // 5. star[i] 요소의 name, url, img_url, recent, like 키 값을 활용하여 값을 조회합니다.
+                        let name = bike['name']
+                        let imgUrl = bike['img']
+                        let tag = bike['tag']
+
+                        // 6. 영화인 카드를 만듭니다.
+                        let tempHtml = `<div class="card">
+            <img class="card-img-top"
+                 src="${imgUrl}"
+                 alt="${name}">
+            <div class="card-body">
+                <a href="#" class="card-title">${name}</a>
+
+                    <li>${tag}</li>
+            </div>
+        </div>`
+
+                        // 7. #star-box에 temp_html을 붙입니다.
+                        $('#cards-box').append(tempHtml)
+                    }
+                }
+            });
+        }
+    </script>
     <style>
         .bd-placeholder-img {
             font-size: 1.125rem;
@@ -61,10 +108,11 @@
     <!-- Custom styles for this template -->
     <link href="https://fonts.googleapis.com/css?family=Playfair+Display:700,900" rel="stylesheet">
     <!-- Custom styles for this template -->
-    <link href="blog.css" rel="stylesheet">
     <script>
 
     </script>
+
+
 </head>
 
 <body data-gr-c-s-loaded="true">
@@ -97,8 +145,6 @@
             <a class="p-2 text-muted" href="#">전기 자전거</a>
             <a class="p-2 text-muted" href="#">전동 킥보드</a>
             <a class="p-2 text-muted" href="#">맞춤 설정</a>
-            <a class="p-2 text-muted" href="#">자전거 대여</a>
-
         </nav>
     </div>
 
